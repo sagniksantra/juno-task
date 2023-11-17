@@ -1,0 +1,111 @@
+Certainly! To add sorting functionality with a small up arrow beside the "In Queue for" and "Date Added on" columns, you can make a few modifications. Below is the modified code with the sorting functionality added:
+
+```jsx
+// ... (previous code)
+
+function App() {
+  const [view, setView] = useState('All'); // 'All', 'Pending', 'Completed'
+  const [sortBy, setSortBy] = useState(null); // 'inQueueFor', 'dateAddedOn'
+  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
+
+  // ... (previous code)
+
+  // Function to handle sorting
+  const handleSort = (column) => {
+    if (sortBy === column) {
+      // If already sorting by the selected column, toggle the sort order
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      // If sorting by a new column, set the new column and default to ascending order
+      setSortBy(column);
+      setSortOrder('asc');
+    }
+  };
+
+  // Function to render the sorting arrow
+  const renderSortArrow = (column) => {
+    if (sortBy === column) {
+      // If currently sorting by this column, show the arrow based on the sort order
+      return sortOrder === 'asc' ? '🔼' : '🔽';
+    }
+    // Otherwise, show an empty string
+    return '';
+  };
+
+  // ... (previous code)
+
+  // Sort data based on selected column and order
+  const sortedData = filteredAndSortedData.slice().sort((a, b) => {
+    if (sortBy === 'inQueueFor') {
+      return sortOrder === 'asc' ? a['In Queue for'] - b['In Queue for'] : b['In Queue for'] - a['In Queue for'];
+    } else if (sortBy === 'dateAddedOn') {
+      const dateA = new Date(a['Date Added on']);
+      const dateB = new Date(b['Date Added on']);
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    }
+    // Default to no sorting
+    return 0;
+  });
+
+  return (
+    <div className="flex h-screen bg-gray-100">
+      {/* ... (previous code) */}
+      
+      {/* Main Content Area */}
+      <div className="flex-1 p-8">
+        <h1 className="text-2xl font-bold mb-4">Data Table</h1>
+        
+        {/* ... (previous code) */}
+        
+        {/* Table Headers with Sorting Arrows */}
+        <DataTable
+          data={sortedData}
+          onSort={handleSort}
+          renderSortArrow={renderSortArrow}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default App;
+```
+
+Now, the `DataTable` component needs to be modified to accept sorting functionality. Make sure your `DataTable` component has the necessary adjustments:
+
+```jsx
+// DataTable component
+
+function DataTable({ data, onSort, renderSortArrow }) {
+  // ... (previous code)
+
+  return (
+    <table className="min-w-full">
+      <thead>
+        <tr>
+          {/* ... (previous code) */}
+
+          <th onClick={() => onSort('inQueueFor')} className="cursor-pointer">
+            In Queue for {renderSortArrow('inQueueFor')}
+          </th>
+          
+          {/* ... (previous code) */}
+
+          <th onClick={() => onSort('dateAddedOn')} className="cursor-pointer">
+            Date Added on {renderSortArrow('dateAddedOn')}
+          </th>
+          
+          {/* ... (previous code) */}
+        </tr>
+      </thead>
+      <tbody>
+        {/* ... (previous code) */}
+      </tbody>
+    </table>
+  );
+}
+
+export default DataTable;
+```
+
+With these changes, clicking on the "In Queue for" and "Date Added on" headers in the DataTable will trigger sorting based on the selected column, and the sorting order will be indicated by the small arrow.

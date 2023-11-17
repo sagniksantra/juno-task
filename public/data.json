@@ -1,0 +1,92 @@
+[
+  {
+      "User": "Alice Johnson",
+      "Risk level": "medium",
+      "Trigger reason": "IP Change",
+      "In queue for": "3 days",
+      "Date added on": "14 Nov, 2023",
+      "Previously reviewed": "No",
+      "Status": "Completed"
+  },
+  {
+      "User": "Bob Williams",
+      "Risk level": "high",
+      "Trigger reason": "FIFO",
+      "In queue for": "5 days",
+      "Date added on": "12 Nov, 2023",
+      "Previously reviewed": "Yes",
+      "Status": "Completed"
+  },
+  {
+      "User": "Charlie Brown",
+      "Risk level": "medium",
+      "Trigger reason": "IP Change",
+      "In queue for": "2 days",
+      "Date added on": "15 Nov, 2023",
+      "Previously reviewed": "No",
+      "Status": "Completed"
+  },
+  {
+      "User": "David Davis",
+      "Risk level": "high",
+      "Trigger reason": "FIFO",
+      "In queue for": "6 days",
+      "Date added on": "11 Nov, 2023",
+      "Previously reviewed": "Yes",
+      "Status": "Pending"
+  },
+  {
+      "User": "Eva Green",
+      "Risk level": "medium",
+      "Trigger reason": "IP Change",
+      "In queue for": "4 days",
+      "Date added on": "13 Nov, 2023",
+      "Previously reviewed": "No",
+      "Status": "Completed"
+  },
+  {
+      "User": "Frank Miller",
+      "Risk level": "high",
+      "Trigger reason": "FIFO",
+      "In queue for": "1 day",
+      "Date added on": "16 Nov, 2023",
+      "Previously reviewed": "Yes",
+      "Status": "Pending"
+  },
+  {
+      "User": "Grace Lee",
+      "Risk level": "medium",
+      "Trigger reason": "IP Change",
+      "In queue for": "5 days",
+      "Date added on": "12 Nov, 2023",
+      "Previously reviewed": "No",
+      "Status": "Completed"
+  },
+  {
+      "User": "Harry Potter",
+      "Risk level": "high",
+      "Trigger reason": "FIFO",
+      "In queue for": "3 days",
+      "Date added on": "14 Nov, 2023",
+      "Previously reviewed": "Yes",
+      "Status": "Completed"
+  },
+  {
+      "User": "Ivy Queen",
+      "Risk level": "medium",
+      "Trigger reason": "IP Change",
+      "In queue for": "6 days",
+      "Date added on": "11 Nov, 2023",
+      "Previously reviewed": "No",
+      "Status": "Pending"
+  },
+  {
+      "User": "Jack King",
+      "Risk level": "high",
+      "Trigger reason": "FIFO",
+      "In queue for": "2 days",
+      "Date added on": "15 Nov, 2023",
+      "Previously reviewed": "Yes",
+      "Status": "Pending"
+  }
+]
