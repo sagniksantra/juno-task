@@ -1,9 +1,12 @@
+// App.jsx
 import React, { useState } from 'react';
 import DataTable from './components/DataTable';
 import data from '../public/data.json';
 
 function App() {
   const [view, setView] = useState('All'); // 'All', 'Pending', 'Completed'
+  const [sortBy, setSortBy] = useState(null); // 'User', 'Risk level', 'Trigger reason', 'In queue for', 'Date added on', 'Previously reviewed'
+  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showTriggerReasonModal, setShowTriggerReasonModal] = useState(false);
@@ -39,6 +42,12 @@ function App() {
     setSelectedRiskLevel(option);
   };
 
+  // Function to handle sorting
+  const handleSort = (column) => {
+    setSortBy(column);
+    setSortOrder((prevSortOrder) => (prevSortOrder === 'asc' ? 'desc' : 'asc'));
+  };
+
   // Filtered, sorted, and searched data
   const filteredAndSortedData = filterData()
     .filter(
@@ -59,6 +68,18 @@ function App() {
       }
       return true;
     })
+    .sort((a, b) => {
+      const valueA = a[sortBy];
+      const valueB = b[sortBy];
+      const order = sortOrder === 'asc' ? 1 : -1;
+
+      // Handle string or number comparison
+      if (typeof valueA === 'string' || typeof valueB === 'string') {
+        return valueA.localeCompare(valueB) * order;
+      } else {
+        return (valueA - valueB) * order;
+      }
+    });
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -86,11 +107,7 @@ function App() {
         <div className="absolute bottom-0 left-0 p-4">
           <div className="flex items-center space-x-2">
             {/* User Photo */}
-            <img
-              src="path-to-your-user-photo.jpg"
-              alt="User Photo"
-              className="w-8 h-8 rounded-full"
-            />
+            <img src="path-to-your-user-photo.jpg" alt="User Photo" className="w-8 h-8 rounded-full" />
             {/* User Name and Email */}
             <div>
               <div className="text-sm font-semibold">John Doe</div>
@@ -102,31 +119,17 @@ function App() {
 
       {/* Main Content Area */}
       <div className="flex-1 p-8">
-      <h1 className="text-2xl font-bold mb-4">Data Table</h1>
+        <h1 className="text-2xl font-bold mb-4">Data Table</h1>
+
         {/* Top Options */}
         <div className="flex items-center space-x-4 mb-4">
-          <div
-            className={`cursor-pointer ${
-              view === 'All' ? 'text-blue-500' : ''
-            }`}
-            onClick={() => setView('All')}
-          >
+          <div className={`cursor-pointer ${view === 'All' ? 'text-blue-500' : ''}`} onClick={() => setView('All')}>
             All
           </div>
-          <div
-            className={`cursor-pointer ${
-              view === 'Pending' ? 'text-blue-500' : ''
-            }`}
-            onClick={() => setView('Pending')}
-          >
+          <div className={`cursor-pointer ${view === 'Pending' ? 'text-blue-500' : ''}`} onClick={() => setView('Pending')}>
             Pending
           </div>
-          <div
-            className={`cursor-pointer ${
-              view === 'Completed' ? 'text-blue-500' : ''
-            }`}
-            onClick={() => setView('Completed')}
-          >
+          <div className={`cursor-pointer ${view === 'Completed' ? 'text-blue-500' : ''}`} onClick={() => setView('Completed')}>
             Completed
           </div>
         </div>
@@ -144,16 +147,10 @@ function App() {
 
         {/* Sorting Buttons */}
         <div className="mb-4">
-          <button
-            onClick={() => setShowTriggerReasonModal(true)}
-            className="px-2 py-1 mr-2 bg-gray-300 hover:bg-gray-400"
-          >
+          <button onClick={() => setShowTriggerReasonModal(true)} className="px-2 py-1 mr-2 bg-gray-300 hover:bg-gray-400">
             Trigger Reason
           </button>
-          <button
-            onClick={() => setShowRiskLevelModal(true)}
-            className="px-2 py-1 bg-gray-300 hover:bg-gray-400"
-          >
+          <button onClick={() => setShowRiskLevelModal(true)} className="px-2 py-1 bg-gray-300 hover:bg-gray-400">
             Risk Level
           </button>
         </div>
@@ -164,7 +161,6 @@ function App() {
             <div className="bg-white p-4 rounded">
               <div className="text-lg font-semibold mb-2">Select Trigger Reason</div>
               <ul className="space-y-2">
-                {/* Replace with your actual trigger reason options */}
                 <li onClick={() => handleTriggerReasonSelect('FIFO')}>FIFO</li>
                 <li onClick={() => handleTriggerReasonSelect('IP Change')}>IP Change</li>
               </ul>
@@ -179,7 +175,6 @@ function App() {
             <div className="bg-white p-4 rounded">
               <div className="text-lg font-semibold mb-2">Select Risk Level</div>
               <ul className="space-y-2">
-                {/* Replace with your actual risk level options */}
                 <li onClick={() => handleRiskLevelSelect('low')}>Low</li>
                 <li onClick={() => handleRiskLevelSelect('medium')}>Medium</li>
                 <li onClick={() => handleRiskLevelSelect('high')}>High</li>
@@ -189,7 +184,8 @@ function App() {
           </div>
         )}
 
-        <DataTable data={filteredAndSortedData} />
+        {/* Table Headers with Sorting Arrows */}
+        <DataTable data={filteredAndSortedData} onSort={handleSort} sortBy={sortBy} sortOrder={sortOrder} />
       </div>
     </div>
   );
