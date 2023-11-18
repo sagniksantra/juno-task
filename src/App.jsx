@@ -14,6 +14,17 @@ function App() {
   const [selectedTriggerReason, setSelectedTriggerReason] = useState('');
   const [selectedRiskLevel, setSelectedRiskLevel] = useState('');
 
+  // Function to determine columns based on the selected view
+  const getColumns = () => {
+    if (view === 'Pending') {
+      return ['User', 'Risk level', 'Trigger reason', 'In queue for', 'Date added on', 'Previously reviewed'];
+    } else if (view === 'Completed') {
+      return ['User', 'Risk level', 'Action reason', 'Time to close', 'Date added on', 'Action taken by'];
+    } else {
+      return ['User', 'Risk level', 'Trigger reason', 'In queue for', 'Date added on', 'Previously reviewed'];
+    }
+  };
+
   // Function to filter data based on the selected view
   const filterData = () => {
     if (view === 'All') {
@@ -91,7 +102,7 @@ function App() {
         {/* Navigation Menu */}
         <nav>
           <ul className="space-y-2">
-            <li onClick={() => setView('All')}>All</li>
+            {/* <li onClick={() => setView('All')}>All</li> */}
             <li onClick={() => setView('Pending')}>Pending</li>
             <li onClick={() => setView('Completed')}>Completed</li>
             <li>Overview</li>
@@ -123,9 +134,9 @@ function App() {
 
         {/* Top Options */}
         <div className="flex items-center space-x-4 mb-4">
-          <div className={`cursor-pointer ${view === 'All' ? 'text-blue-500' : ''}`} onClick={() => setView('All')}>
+          {/* <div className={`cursor-pointer ${view === 'All' ? 'text-blue-500' : ''}`} onClick={() => setView('All')}>
             All
-          </div>
+          </div> */}
           <div className={`cursor-pointer ${view === 'Pending' ? 'text-blue-500' : ''}`} onClick={() => setView('Pending')}>
             Pending
           </div>
@@ -185,7 +196,13 @@ function App() {
         )}
 
         {/* Table Headers with Sorting Arrows */}
-        <DataTable data={filteredAndSortedData} onSort={handleSort} sortBy={sortBy} sortOrder={sortOrder} />
+        <DataTable
+          data={filteredAndSortedData}
+          onSort={handleSort}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          columns={getColumns()}
+        />
       </div>
     </div>
   );
