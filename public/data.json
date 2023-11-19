@@ -13,7 +13,7 @@
     },
     {
       "User": "Bob Williams",
-      "Risk level": "high",
+      "Risk level": "low",
       "Trigger reason": "FIFO",
       "In queue for": "5 days",
       "Date added on": "12 Nov, 2023",
@@ -73,7 +73,7 @@
     },
     {
       "User": "Grace Lee",
-      "Risk level": "medium",
+      "Risk level": "low",
       "Trigger reason": "IP Change",
       "In queue for": "5 days",
       "Date added on": "12 Nov, 2023",

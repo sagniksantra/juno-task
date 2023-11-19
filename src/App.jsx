@@ -3,65 +3,18 @@ import React, { useState } from 'react';
 import DataTable from './components/DataTable';
 import data from '../public/data.json';
 
-const CloseAccountModal = ({ isOpen, onClose, onSubmit, data, onChange }) => {
-  return (
-    isOpen && (
-      <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
-        <div className="bg-white p-4 rounded">
-          <h2 className="text-lg font-semibold mb-2">Close Account Form</h2>
-          <form>
-            <div className="mb-2">
-              <label>Email:</label>
-              <input
-                type="text"
-                name="email"
-                value={data.email}
-                onChange={onChange}
-                className="p-2 border border-gray-300"
-              />
-            </div>
-            <div className="mb-2">
-              <label>Want to file UAR:</label>
-              <div className="flex items-center space-x-2">
-                <label>
-                  <input
-                    type="radio"
-                    name="wantToUAR"
-                    value="Yes"
-                    checked={data.wantToUAR === 'Yes'}
-                    onChange={onChange}
-                  />
-                  Yes
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="wantToUAR"
-                    value="No"
-                    checked={data.wantToUAR === 'No'}
-                    onChange={onChange}
-                  />
-                  No
-                </label>
-              </div>
-            </div>
-            {/* Add other form fields (Reason, Note, Charge Closure Fee) as needed */}
-            {/* ... */}
-            <button type="button" onClick={onSubmit} className="px-4 py-2 bg-blue-500 text-white">
-              Close Account
-            </button>
-            <button type="button" onClick={onClose} className="px-4 py-2 ml-2 border">
-              Cancel
-            </button>
-          </form>
-        </div>
-      </div>
-    )
-  );
-};
+const App = () => {
+  const [view, setView] = useState('All'); // 'All', 'Pending', 'Completed'
+  const [sortBy, setSortBy] = useState(null); // 'User', 'Risk level', 'Trigger reason', 'In queue for', 'Date added on', 'Previously reviewed'
+  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTriggerReason, setSelectedTriggerReason] = useState('');
+  const [selectedRiskLevel, setSelectedRiskLevel] = useState('');
 
-function App() {
-  // New state variables for close account form
+  const handleRiskLevelSelect = (option) => {
+    setSelectedRiskLevel(option);
+  };
+
   const [showCloseAccountForm, setShowCloseAccountForm] = useState(false);
   const [closeAccountData, setCloseAccountData] = useState({
     email: '',
@@ -71,42 +24,31 @@ function App() {
     chargeClosureFee: 'No',
   });
 
+  const [showDropdownTriggerReason, setShowDropdownTriggerReason] = useState(false);
+  const [showDropdownRiskLevel, setShowDropdownRiskLevel] = useState(false);
 
-  // Function to handle input changes in the close account form
-  const handleCloseAccountInputChange = (event) => {
-    const { name, value } = event.target;
-    setCloseAccountData((prevData) => ({ ...prevData, [name]: value }));
+  const handleDropdownSelect = (option, dropdownType) => {
+    if (dropdownType === 'triggerReason') {
+      setSelectedTriggerReason(option);
+      setShowDropdownTriggerReason(false);
+    } else if (dropdownType === 'riskLevel') {
+      setSelectedRiskLevel(option);
+      setShowDropdownRiskLevel(false);
+    }
   };
 
-    // Function to handle close account form submission
-    const handleAccountClosure = () => {
-      // Perform the necessary actions for account closure
-      // (e.g., send data to server, update state, etc.)
-      // For now, let's just log the data to the console
-      console.log('Close Account Data:', closeAccountData);
-  
-      // Close the form and reset data
-      setShowCloseAccountForm(false);
-      setCloseAccountData({
-        email: '',
-        wantToUAR: 'No',
-        reason: '',
-        note: '',
-        chargeClosureFee: 'No',
-      });
-    };
+  const handleAccountClosure = () => {
+    console.log('Close Account Data:', closeAccountData);
+    setShowCloseAccountForm(false);
+    setCloseAccountData({
+      email: '',
+      wantToUAR: 'No',
+      reason: '',
+      note: '',
+      chargeClosureFee: 'No',
+    });
+  };
 
-  const [view, setView] = useState('All'); // 'All', 'Pending', 'Completed'
-  const [sortBy, setSortBy] = useState(null); // 'User', 'Risk level', 'Trigger reason', 'In queue for', 'Date added on', 'Previously reviewed'
-  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
-
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showTriggerReasonModal, setShowTriggerReasonModal] = useState(false);
-  const [showRiskLevelModal, setShowRiskLevelModal] = useState(false);
-  const [selectedTriggerReason, setSelectedTriggerReason] = useState('');
-  const [selectedRiskLevel, setSelectedRiskLevel] = useState('');
-
-  // Function to determine columns based on the selected view
   const getColumns = () => {
     if (view === 'Pending') {
       return ['User', 'Risk level', 'Trigger reason', 'In queue for', 'Date added on', 'Previously reviewed'];
@@ -117,7 +59,6 @@ function App() {
     }
   };
 
-  // Function to filter data based on the selected view
   const filterData = () => {
     if (view === 'All') {
       return data;
@@ -128,30 +69,37 @@ function App() {
     }
   };
 
-  // Function to handle search
+  
+
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // Function to handle Trigger Reason selection
-  const handleTriggerReasonSelect = (option) => {
-    setShowTriggerReasonModal(false);
-    setSelectedTriggerReason(option);
-  };
-
-  // Function to handle Risk Level selection
-  const handleRiskLevelSelect = (option) => {
-    setShowRiskLevelModal(false);
-    setSelectedRiskLevel(option);
-  };
-
-  // Function to handle sorting
   const handleSort = (column) => {
     setSortBy(column);
     setSortOrder((prevSortOrder) => (prevSortOrder === 'asc' ? 'desc' : 'asc'));
   };
 
-  // Filtered, sorted, and searched data
+  const handleDropdownTriggerReasonToggle = () => {
+    setShowDropdownTriggerReason((prev) => !prev);
+  };
+
+  const handleDropdownRiskLevelToggle = () => {
+    setShowDropdownRiskLevel((prev) => !prev);
+  };
+
+  const handleCloseAccountFormToggle = () => {
+    setShowCloseAccountForm((prev) => !prev);
+  };
+
+  const handleCloseAccountInputChange = (event) => {
+    const { name, value } = event.target;
+    setCloseAccountData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const dropdownOptionsTriggerReason = ['FIFO', 'IP Change'];
+  const dropdownOptionsRiskLevel = ['Low', 'Medium', 'High'];
+
   const filteredAndSortedData = filterData()
     .filter(
       (item) =>
@@ -167,7 +115,7 @@ function App() {
     })
     .filter((item) => {
       if (selectedRiskLevel) {
-        return item['Risk level'] === selectedRiskLevel;
+        return item['Risk level'].toLowerCase() === selectedRiskLevel.toLowerCase();
       }
       return true;
     })
@@ -176,7 +124,6 @@ function App() {
       const valueB = b[sortBy];
       const order = sortOrder === 'asc' ? 1 : -1;
 
-      // Handle string or number comparison
       if (typeof valueA === 'string' || typeof valueB === 'string') {
         return valueA.localeCompare(valueB) * order;
       } else {
@@ -184,26 +131,13 @@ function App() {
       }
     });
 
-    // Close Account Modal Handlers
-  const handleCloseAccountModalOpen = () => {
-    setShowCloseAccountForm(true);
-  };
-
-  const handleCloseAccountModalClose = () => {
-    setShowCloseAccountForm(false);
-  };
-
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Left Sidebar/Nav */}
       <div className="w-1/6 p-4 bg-gray-800 text-white">
-        {/* Logo */}
         <div className="text-2xl font-bold mb-4">Your Logo</div>
-
-        {/* Navigation Menu */}
         <nav>
           <ul className="space-y-2">
-            {/* <li onClick={() => setView('All')}>All</li> */}
             <li onClick={() => setView('Pending')}>Pending</li>
             <li onClick={() => setView('Completed')}>Completed</li>
             <li>Overview</li>
@@ -214,13 +148,9 @@ function App() {
             <li>UAR</li>
           </ul>
         </nav>
-
-        {/* User Info */}
         <div className="absolute bottom-0 left-0 p-4">
           <div className="flex items-center space-x-2">
-            {/* User Photo */}
             <img src="path-to-your-user-photo.jpg" alt="User Photo" className="w-8 h-8 rounded-full" />
-            {/* User Name and Email */}
             <div>
               <div className="text-sm font-semibold">John Doe</div>
               <div className="text-xs">john@example.com</div>
@@ -235,9 +165,6 @@ function App() {
 
         {/* Top Options */}
         <div className="flex items-center space-x-4 mb-4">
-          {/* <div className={`cursor-pointer ${view === 'All' ? 'text-blue-500' : ''}`} onClick={() => setView('All')}>
-            All
-          </div> */}
           <div className={`cursor-pointer ${view === 'Pending' ? 'text-blue-500' : ''}`} onClick={() => setView('Pending')}>
             Pending
           </div>
@@ -259,56 +186,155 @@ function App() {
 
         {/* Sorting Buttons */}
         <div className="mb-4">
-          <button onClick={() => setShowTriggerReasonModal(true)} className="px-2 py-1 mr-2 bg-gray-300 hover:bg-gray-400">
-            Trigger Reason
-          </button>
-          <button onClick={() => setShowRiskLevelModal(true)} className="px-2 py-1 bg-gray-300 hover:bg-gray-400">
-            Risk Level
-          </button>
+          <div className="relative inline-block text-left">
+            <div>
+              <button
+                onClick={handleDropdownTriggerReasonToggle}
+                type="button"
+                className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                {selectedTriggerReason || 'Select Trigger Reason'}
+                <svg
+                  className="-mr-1 ml-2 h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 11.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+            {showDropdownTriggerReason && (
+              <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                <div
+                  className="py-1"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="options-menu"
+                >
+                  {dropdownOptionsTriggerReason.map((option) => (
+                    <div
+                      key={option}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      onClick={() => handleDropdownSelect(option, 'triggerReason')}
+                    >
+                      {option}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="relative inline-block text-left">
+            <div>
+              <button
+                onClick={handleDropdownRiskLevelToggle}
+                type="button"
+                className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                {selectedRiskLevel || 'Select Risk Level'}
+                <svg
+                  className="-mr-1 ml-2 h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 11.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+            {showDropdownRiskLevel && (
+              <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                <div
+                  className="py-1"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="options-menu"
+                >
+                  {dropdownOptionsRiskLevel.map((option) => (
+                    <div
+                      key={option}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      onClick={() => handleDropdownSelect(option, 'riskLevel')}
+                    >
+                      {option}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
+        {/* Close Account Button */}
         <div className="mb-4">
-          {/* Close Account Button */}
-          <button onClick={handleCloseAccountModalOpen} className="cursor-pointer text-blue-500">
+          <button onClick={handleCloseAccountFormToggle} className="cursor-pointer text-blue-500">
             Close Account
           </button>
         </div>
 
-        {/* Close Account Modal */}
-        <CloseAccountModal
-          isOpen={showCloseAccountForm}
-          onClose={handleCloseAccountModalClose}
-          onSubmit={handleAccountClosure}
-          data={closeAccountData}
-          onChange={handleCloseAccountInputChange}
-        />
-
-        {/* Trigger Reason Modal */}
-        {showTriggerReasonModal && (
-          <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
-            <div className="bg-white p-4 rounded">
-              <div className="text-lg font-semibold mb-2">Select Trigger Reason</div>
-              <ul className="space-y-2">
-                <li onClick={() => handleTriggerReasonSelect('FIFO')}>FIFO</li>
-                <li onClick={() => handleTriggerReasonSelect('IP Change')}>IP Change</li>
-              </ul>
-              <button onClick={() => setShowTriggerReasonModal(false)}>Close</button>
-            </div>
-          </div>
-        )}
-
-        {/* Risk Level Modal */}
-        {showRiskLevelModal && (
-          <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
-            <div className="bg-white p-4 rounded">
-              <div className="text-lg font-semibold mb-2">Select Risk Level</div>
-              <ul className="space-y-2">
-                <li onClick={() => handleRiskLevelSelect('low')}>Low</li>
-                <li onClick={() => handleRiskLevelSelect('medium')}>Medium</li>
-                <li onClick={() => handleRiskLevelSelect('high')}>High</li>
-              </ul>
-              <button onClick={() => setShowRiskLevelModal(false)}>Close</button>
-            </div>
+        {/* Close Account Form */}
+        {showCloseAccountForm && (
+          <div className="bg-white p-4 rounded">
+            <h2 className="text-lg font-semibold mb-2">Close Account Form</h2>
+            <form>
+              <div className="mb-2">
+                <label>Email:</label>
+                <input
+                  type="text"
+                  name="email"
+                  value={closeAccountData.email}
+                  onChange={handleCloseAccountInputChange}
+                  className="p-2 border border-gray-300"
+                />
+              </div>
+              <div className="mb-2">
+                <label>Want to file UAR:</label>
+                <div className="flex items-center space-x-2">
+                  <label>
+                    <input
+                      type="radio"
+                      name="wantToUAR"
+                      value="Yes"
+                      checked={closeAccountData.wantToUAR === 'Yes'}
+                      onChange={handleCloseAccountInputChange}
+                    />
+                    Yes
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="wantToUAR"
+                      value="No"
+                      checked={closeAccountData.wantToUAR === 'No'}
+                      onChange={handleCloseAccountInputChange}
+                    />
+                    No
+                  </label>
+                </div>
+              </div>
+              {/* Add other form fields (Reason, Note, Charge Closure Fee) as needed */}
+              {/* ... */}
+              <button type="button" onClick={handleAccountClosure} className="px-4 py-2 bg-blue-500 text-white">
+                Close Account
+              </button>
+              <button type="button" className="px-4 py-2 ml-2 border" onClick={handleCloseAccountFormToggle}>
+                Cancel
+              </button>
+            </form>
           </div>
         )}
 
@@ -323,6 +349,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
