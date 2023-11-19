@@ -108,15 +108,6 @@ const App = () => {
     setSelectedRiskLevel(option);
   };
 
-  // const [showCloseAccountForm, setShowCloseAccountForm] = useState(false);
-  // const [closeAccountData, setCloseAccountData] = useState({
-  //   email: '',
-  //   wantToUAR: 'No',
-  //   reason: '',
-  //   note: '',
-  //   chargeClosureFee: 'No',
-  // });
-
   const [showDropdownTriggerReason, setShowDropdownTriggerReason] = useState(false);
   const [showDropdownRiskLevel, setShowDropdownRiskLevel] = useState(false);
 
@@ -130,17 +121,6 @@ const App = () => {
     }
   };
 
-  // const handleAccountClosure = () => {
-  //   console.log('Close Account Data:', closeAccountData);
-  //   setShowCloseAccountForm(false);
-  //   setCloseAccountData({
-  //     email: '',
-  //     wantToUAR: 'No',
-  //     reason: '',
-  //     note: '',
-  //     chargeClosureFee: 'No',
-  //   });
-  // };
 
       // Close Account Modal Handlers
       const handleCloseAccountModalOpen = () => {
@@ -190,14 +170,6 @@ const App = () => {
     setShowDropdownRiskLevel((prev) => !prev);
   };
 
-  // const handleCloseAccountFormToggle = () => {
-  //   setShowCloseAccountForm((prev) => !prev);
-  // };
-
-  // const handleCloseAccountInputChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setCloseAccountData((prevData) => ({ ...prevData, [name]: value }));
-  // };
 
   const dropdownOptionsTriggerReason = ['FIFO', 'IP Change'];
   const dropdownOptionsRiskLevel = ['Low', 'Medium', 'High'];
@@ -236,10 +208,10 @@ const App = () => {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Left Sidebar/Nav */}
-      <div className="w-1/6 p-4 bg-gray-800 text-white">
-        <div className="text-2xl font-bold mb-4">Your Logo</div>
+      <div className="w-1/6 p-4 bg-gray-200 ">
+        <div className="text-2xl font-bold mb-16 text-gray-400">[ Your Logo ]</div>
         <nav>
-          <ul className="space-y-2">
+          <ul className="space-y-4">
             <li onClick={() => setView('Pending')}>Pending</li>
             <li onClick={() => setView('Completed')}>Completed</li>
             <li>Overview</li>
@@ -263,76 +235,89 @@ const App = () => {
 
       {/* Main Content Area */}
       <div className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-4">Data Table</h1>
+        <h1 className="text-2xl font-bold mb-4">Monitoring</h1>
 
         {/* Top Options */}
-        <div className="flex items-center space-x-4 mb-4">
-          <div className={`cursor-pointer ${view === 'Pending' ? 'text-blue-500' : ''}`} onClick={() => setView('Pending')}>
-            Pending
-          </div>
-          <div className={`cursor-pointer ${view === 'Completed' ? 'text-blue-500' : ''}`} onClick={() => setView('Completed')}>
-            Completed
-          </div>
-        </div>
+        <div className="flex items-center justify-between mb-4">
+  {/* Left side */}
+  <div className="flex items-center space-x-4">
+    <div className={`cursor-pointer ${view === 'Pending' ? 'text-blue-500' : ''}`} onClick={() => setView('Pending')}>
+      Pending
+    </div>
+    <div className={`cursor-pointer ${view === 'Completed' ? 'text-blue-500' : ''}`} onClick={() => setView('Completed')}>
+      Completed
+    </div>
+  </div>
 
-        {/* Search Bar */}
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="p-2 border border-gray-300"
-          />
-        </div>
+  {/* Right side */}
+  <div className="flex items-center">
+    {/* Close Account Button */}
+    <button onClick={handleCloseAccountModalOpen} className="cursor-pointer text-red-600">
+      Close Account
+    </button>
+  </div>
+</div>
 
-        {/* Sorting Buttons */}
-        <div className="mb-4">
-          <div className="relative inline-block text-left">
-            <div>
-              <button
-                onClick={handleDropdownTriggerReasonToggle}
-                type="button"
-                className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                {selectedTriggerReason || 'Select Trigger Reason'}
-                <svg
-                  className="-mr-1 ml-2 h-5 w-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 11.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </div>
-            {showDropdownTriggerReason && (
-              <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+
+        <div className="mb-4 flex flex-col md:flex-row">
+      {/* Search Bar */}
+      <div className="mb-4 md:mr-4">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchTerm}
+          onChange={handleSearch}
+          className="p-2 border border-gray-300"
+        />
+      </div>
+
+      {/* Sorting Buttons */}
+      <div className="mb-4 relative inline-block text-left md:mr-4">
+        <div>
+          <button
+            onClick={handleDropdownTriggerReasonToggle}
+            type="button"
+            className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            {selectedTriggerReason || 'Select Trigger Reason'}
+            <svg
+              className="-mr-1 ml-2 h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 11.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+        {showDropdownTriggerReason && (
+          <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+            <div
+              className="py-1"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="options-menu"
+            >
+              {dropdownOptionsTriggerReason.map((option) => (
                 <div
-                  className="py-1"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="options-menu"
+                  key={option}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  role="menuitem"
+                  onClick={() => handleDropdownSelect(option, 'triggerReason')}
                 >
-                  {dropdownOptionsTriggerReason.map((option) => (
-                    <div
-                      key={option}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      onClick={() => handleDropdownSelect(option, 'triggerReason')}
-                    >
-                      {option}
-                    </div>
-                  ))}
+                  {option}
                 </div>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
+        )}
+      </div>
+    
 
           <div className="relative inline-block text-left">
             <div>
@@ -381,12 +366,11 @@ const App = () => {
           </div>
         </div>
 
-        <div className="mb-4">
-          {/* Close Account Button */}
-          <button onClick={handleCloseAccountModalOpen} className="cursor-pointer text-blue-500">
+        {/* <div className="mb-4">
+          <button onClick={handleCloseAccountModalOpen} className="cursor-pointer text-red-600">
             Close Account
           </button>
-        </div>
+        </div> */}
 
         {/* Close Account Modal */}
         <CloseAccountModal

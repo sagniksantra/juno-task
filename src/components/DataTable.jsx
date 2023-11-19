@@ -18,7 +18,7 @@ const DataTable = ({ data, onSort, sortBy, sortOrder, columns }) => {
           {data.map((item, index) => (
             <tr key={index}>
               {columns.map((column, index) => (
-                <td key={index} className="py-2 px-4 border-b">
+                <td key={index} className="py-2 px-4 border-b text-sm">
                   {item[column]}
                 </td>
               ))}
