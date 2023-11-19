@@ -3,7 +3,99 @@ import React, { useState } from 'react';
 import DataTable from './components/DataTable';
 import data from '../public/data.json';
 
+const CloseAccountModal = ({ isOpen, onClose, onSubmit, data, onChange }) => {
+  return (
+    isOpen && (
+      <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
+        <div className="bg-white p-4 rounded">
+          <h2 className="text-lg font-semibold mb-2">Close Account Form</h2>
+          <form>
+            <div className="mb-2">
+              <label>Email:</label>
+              <input
+                type="text"
+                name="email"
+                value={data.email}
+                onChange={onChange}
+                className="p-2 border border-gray-300"
+              />
+            </div>
+            <div className="mb-2">
+              <label>Want to file UAR:</label>
+              <div className="flex items-center space-x-2">
+                <label>
+                  <input
+                    type="radio"
+                    name="wantToUAR"
+                    value="Yes"
+                    checked={data.wantToUAR === 'Yes'}
+                    onChange={onChange}
+                  />
+                  Yes
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="wantToUAR"
+                    value="No"
+                    checked={data.wantToUAR === 'No'}
+                    onChange={onChange}
+                  />
+                  No
+                </label>
+              </div>
+            </div>
+            {/* Add other form fields (Reason, Note, Charge Closure Fee) as needed */}
+            {/* ... */}
+            <button type="button" onClick={onSubmit} className="px-4 py-2 bg-blue-500 text-white">
+              Close Account
+            </button>
+            <button type="button" onClick={onClose} className="px-4 py-2 ml-2 border">
+              Cancel
+            </button>
+          </form>
+        </div>
+      </div>
+    )
+  );
+};
+
 function App() {
+  // New state variables for close account form
+  const [showCloseAccountForm, setShowCloseAccountForm] = useState(false);
+  const [closeAccountData, setCloseAccountData] = useState({
+    email: '',
+    wantToUAR: 'No',
+    reason: '',
+    note: '',
+    chargeClosureFee: 'No',
+  });
+
+
+  // Function to handle input changes in the close account form
+  const handleCloseAccountInputChange = (event) => {
+    const { name, value } = event.target;
+    setCloseAccountData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+    // Function to handle close account form submission
+    const handleAccountClosure = () => {
+      // Perform the necessary actions for account closure
+      // (e.g., send data to server, update state, etc.)
+      // For now, let's just log the data to the console
+      console.log('Close Account Data:', closeAccountData);
+  
+      // Close the form and reset data
+      setShowCloseAccountForm(false);
+      setCloseAccountData({
+        email: '',
+        wantToUAR: 'No',
+        reason: '',
+        note: '',
+        chargeClosureFee: 'No',
+      });
+    };
+
   const [view, setView] = useState('All'); // 'All', 'Pending', 'Completed'
   const [sortBy, setSortBy] = useState(null); // 'User', 'Risk level', 'Trigger reason', 'In queue for', 'Date added on', 'Previously reviewed'
   const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
@@ -92,6 +184,15 @@ function App() {
       }
     });
 
+    // Close Account Modal Handlers
+  const handleCloseAccountModalOpen = () => {
+    setShowCloseAccountForm(true);
+  };
+
+  const handleCloseAccountModalClose = () => {
+    setShowCloseAccountForm(false);
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Left Sidebar/Nav */}
@@ -165,6 +266,22 @@ function App() {
             Risk Level
           </button>
         </div>
+
+        <div className="mb-4">
+          {/* Close Account Button */}
+          <button onClick={handleCloseAccountModalOpen} className="cursor-pointer text-blue-500">
+            Close Account
+          </button>
+        </div>
+
+        {/* Close Account Modal */}
+        <CloseAccountModal
+          isOpen={showCloseAccountForm}
+          onClose={handleCloseAccountModalClose}
+          onSubmit={handleAccountClosure}
+          data={closeAccountData}
+          onChange={handleCloseAccountInputChange}
+        />
 
         {/* Trigger Reason Modal */}
         {showTriggerReasonModal && (
