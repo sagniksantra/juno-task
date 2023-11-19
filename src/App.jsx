@@ -3,7 +3,100 @@ import React, { useState } from 'react';
 import DataTable from './components/DataTable';
 import data from '../public/data.json';
 
+const CloseAccountModal = ({ isOpen, onClose, onSubmit, data, onChange }) => {
+  return (
+    isOpen && (
+      <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
+        <div className="bg-white p-4 rounded">
+          <h2 className="text-lg font-semibold mb-2">Close Account Form</h2>
+          <form>
+            <div className="mb-2">
+              <label>Email:</label>
+              <input
+                type="text"
+                name="email"
+                value={data.email}
+                onChange={onChange}
+                className="p-2 border border-gray-300"
+              />
+            </div>
+            <div className="mb-2">
+              <label>Want to file UAR:</label>
+              <div className="flex items-center space-x-2">
+                <label>
+                  <input
+                    type="radio"
+                    name="wantToUAR"
+                    value="Yes"
+                    checked={data.wantToUAR === 'Yes'}
+                    onChange={onChange}
+                  />
+                  Yes
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="wantToUAR"
+                    value="No"
+                    checked={data.wantToUAR === 'No'}
+                    onChange={onChange}
+                  />
+                  No
+                </label>
+              </div>
+            </div>
+            {/* Add other form fields (Reason, Note, Charge Closure Fee) as needed */}
+            {/* ... */}
+            <button type="button" onClick={onSubmit} className="px-4 py-2 bg-blue-500 text-white">
+              Close Account
+            </button>
+            <button type="button" onClick={onClose} className="px-4 py-2 ml-2 border">
+              Cancel
+            </button>
+          </form>
+        </div>
+      </div>
+    )
+  );
+};
+
 const App = () => {
+
+  const [showCloseAccountForm, setShowCloseAccountForm] = useState(false);
+  const [closeAccountData, setCloseAccountData] = useState({
+    email: '',
+    wantToUAR: 'No',
+    reason: '',
+    note: '',
+    chargeClosureFee: 'No',
+  });
+
+
+  // Function to handle input changes in the close account form
+  const handleCloseAccountInputChange = (event) => {
+    const { name, value } = event.target;
+    setCloseAccountData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+    // Function to handle close account form submission
+    const handleAccountClosure = () => {
+      // Perform the necessary actions for account closure
+      // (e.g., send data to server, update state, etc.)
+      // For now, let's just log the data to the console
+      console.log('Close Account Data:', closeAccountData);
+
+      // Close the form and reset data
+      setShowCloseAccountForm(false);
+      setCloseAccountData({
+        email: '',
+        wantToUAR: 'No',
+        reason: '',
+        note: '',
+        chargeClosureFee: 'No',
+      });
+    };
+
+
   const [view, setView] = useState('All'); // 'All', 'Pending', 'Completed'
   const [sortBy, setSortBy] = useState(null); // 'User', 'Risk level', 'Trigger reason', 'In queue for', 'Date added on', 'Previously reviewed'
   const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
@@ -15,14 +108,14 @@ const App = () => {
     setSelectedRiskLevel(option);
   };
 
-  const [showCloseAccountForm, setShowCloseAccountForm] = useState(false);
-  const [closeAccountData, setCloseAccountData] = useState({
-    email: '',
-    wantToUAR: 'No',
-    reason: '',
-    note: '',
-    chargeClosureFee: 'No',
-  });
+  // const [showCloseAccountForm, setShowCloseAccountForm] = useState(false);
+  // const [closeAccountData, setCloseAccountData] = useState({
+  //   email: '',
+  //   wantToUAR: 'No',
+  //   reason: '',
+  //   note: '',
+  //   chargeClosureFee: 'No',
+  // });
 
   const [showDropdownTriggerReason, setShowDropdownTriggerReason] = useState(false);
   const [showDropdownRiskLevel, setShowDropdownRiskLevel] = useState(false);
@@ -37,17 +130,26 @@ const App = () => {
     }
   };
 
-  const handleAccountClosure = () => {
-    console.log('Close Account Data:', closeAccountData);
-    setShowCloseAccountForm(false);
-    setCloseAccountData({
-      email: '',
-      wantToUAR: 'No',
-      reason: '',
-      note: '',
-      chargeClosureFee: 'No',
-    });
-  };
+  // const handleAccountClosure = () => {
+  //   console.log('Close Account Data:', closeAccountData);
+  //   setShowCloseAccountForm(false);
+  //   setCloseAccountData({
+  //     email: '',
+  //     wantToUAR: 'No',
+  //     reason: '',
+  //     note: '',
+  //     chargeClosureFee: 'No',
+  //   });
+  // };
+
+      // Close Account Modal Handlers
+      const handleCloseAccountModalOpen = () => {
+        setShowCloseAccountForm(true);
+      };
+    
+      const handleCloseAccountModalClose = () => {
+        setShowCloseAccountForm(false);
+      };
 
   const getColumns = () => {
     if (view === 'Pending') {
@@ -88,14 +190,14 @@ const App = () => {
     setShowDropdownRiskLevel((prev) => !prev);
   };
 
-  const handleCloseAccountFormToggle = () => {
-    setShowCloseAccountForm((prev) => !prev);
-  };
+  // const handleCloseAccountFormToggle = () => {
+  //   setShowCloseAccountForm((prev) => !prev);
+  // };
 
-  const handleCloseAccountInputChange = (event) => {
-    const { name, value } = event.target;
-    setCloseAccountData((prevData) => ({ ...prevData, [name]: value }));
-  };
+  // const handleCloseAccountInputChange = (event) => {
+  //   const { name, value } = event.target;
+  //   setCloseAccountData((prevData) => ({ ...prevData, [name]: value }));
+  // };
 
   const dropdownOptionsTriggerReason = ['FIFO', 'IP Change'];
   const dropdownOptionsRiskLevel = ['Low', 'Medium', 'High'];
@@ -279,64 +381,21 @@ const App = () => {
           </div>
         </div>
 
-        {/* Close Account Button */}
         <div className="mb-4">
-          <button onClick={handleCloseAccountFormToggle} className="cursor-pointer text-blue-500">
+          {/* Close Account Button */}
+          <button onClick={handleCloseAccountModalOpen} className="cursor-pointer text-blue-500">
             Close Account
           </button>
         </div>
 
-        {/* Close Account Form */}
-        {showCloseAccountForm && (
-          <div className="bg-white p-4 rounded">
-            <h2 className="text-lg font-semibold mb-2">Close Account Form</h2>
-            <form>
-              <div className="mb-2">
-                <label>Email:</label>
-                <input
-                  type="text"
-                  name="email"
-                  value={closeAccountData.email}
-                  onChange={handleCloseAccountInputChange}
-                  className="p-2 border border-gray-300"
-                />
-              </div>
-              <div className="mb-2">
-                <label>Want to file UAR:</label>
-                <div className="flex items-center space-x-2">
-                  <label>
-                    <input
-                      type="radio"
-                      name="wantToUAR"
-                      value="Yes"
-                      checked={closeAccountData.wantToUAR === 'Yes'}
-                      onChange={handleCloseAccountInputChange}
-                    />
-                    Yes
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="wantToUAR"
-                      value="No"
-                      checked={closeAccountData.wantToUAR === 'No'}
-                      onChange={handleCloseAccountInputChange}
-                    />
-                    No
-                  </label>
-                </div>
-              </div>
-              {/* Add other form fields (Reason, Note, Charge Closure Fee) as needed */}
-              {/* ... */}
-              <button type="button" onClick={handleAccountClosure} className="px-4 py-2 bg-blue-500 text-white">
-                Close Account
-              </button>
-              <button type="button" className="px-4 py-2 ml-2 border" onClick={handleCloseAccountFormToggle}>
-                Cancel
-              </button>
-            </form>
-          </div>
-        )}
+        {/* Close Account Modal */}
+        <CloseAccountModal
+          isOpen={showCloseAccountForm}
+          onClose={handleCloseAccountModalClose}
+          onSubmit={handleAccountClosure}
+          data={closeAccountData}
+          onChange={handleCloseAccountInputChange}
+        />
 
         {/* Table Headers with Sorting Arrows */}
         <DataTable
