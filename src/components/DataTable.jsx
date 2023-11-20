@@ -18,7 +18,19 @@ const DataTable = ({ data, onSort, sortBy, sortOrder, columns }) => {
           {data.map((item, index) => (
             <tr key={index}>
               {columns.map((column, index) => (
-                <td key={index} className="py-2 px-4 border-b text-sm">
+                <td
+                  key={index}
+                  className={`py-2 px-4 border-b text-sm ${
+                    column === 'Risk level' &&
+                    (item[column] === 'high'
+                      ? 'text-red-700'
+                      : item[column] === 'medium'
+                      ? 'text-orange-500'
+                      : item[column] === 'low'
+                      ? 'text-green-700'
+                      : '')
+                  }`}
+                >
                   {item[column]}
                 </td>
               ))}

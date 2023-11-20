@@ -1,6 +1,7 @@
 [
     {
       "User": "Alice Johnson",
+      "userId": "alice@example.com",
       "Risk level": "medium",
       "Trigger reason": "IP Change",
       "In queue for": "3 days",
@@ -13,6 +14,7 @@
     },
     {
       "User": "Bob Williams",
+      "userId": "bob@example.com",
       "Risk level": "low",
       "Trigger reason": "FIFO",
       "In queue for": "5 days",
@@ -25,6 +27,7 @@
     },
     {
       "User": "Charlie Brown",
+      "userId": "bob@example.com",
       "Risk level": "medium",
       "Trigger reason": "IP Change",
       "In queue for": "2 days",
@@ -37,6 +40,7 @@
     },
     {
       "User": "David Davis",
+      "userId": "bob@example.com",
       "Risk level": "high",
       "Trigger reason": "FIFO",
       "In queue for": "6 days",
@@ -49,6 +53,7 @@
     },
     {
       "User": "Eva Green",
+      "userId": "bob@example.com",
       "Risk level": "medium",
       "Trigger reason": "IP Change",
       "In queue for": "4 days",

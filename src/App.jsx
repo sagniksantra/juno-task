@@ -8,10 +8,10 @@ const CloseAccountModal = ({ isOpen, onClose, onSubmit, data, onChange }) => {
     isOpen && (
       <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
         <div className="bg-white p-4 rounded">
-          <h2 className="text-lg font-semibold mb-2">Close Account Form</h2>
+          <h2 className="text-lg font-semibold mb-2">Close Account</h2>
           <form>
-            <div className="mb-2">
-              <label>Email:</label>
+            <div className="mb-2 mr-4">
+              <label className="mr-4 text-sm text-gray-600">Email:</label>
               <input
                 type="text"
                 name="email"
@@ -20,9 +20,9 @@ const CloseAccountModal = ({ isOpen, onClose, onSubmit, data, onChange }) => {
                 className="p-2 border border-gray-300"
               />
             </div>
-            <div className="mb-2">
+            <div className="mb-2 flex items-center space-x-2 text-sm text-gray-600">
               <label>Want to file UAR:</label>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 text-gray-600 text-sm">
                 <label>
                   <input
                     type="radio"
@@ -45,12 +45,60 @@ const CloseAccountModal = ({ isOpen, onClose, onSubmit, data, onChange }) => {
                 </label>
               </div>
             </div>
+            <div className="mb-2 mr-4">
+              <label className="mr-4 text-gray-600 text-sm">Reason:</label>
+              <select
+                name="reason"
+                value={data.reason}
+                onChange={onChange}
+                className="p-2 border border-gray-300 text-gray-600 text-sm"
+              >
+                <option value="">Select a reason</option>
+                <option value="Moving">Moving</option>
+                <option value="Financial">Financial reasons</option>
+                {/* Add more options as needed */}
+              </select>
+            </div>
+            <div className="mb-2 mr-4">
+              <label className="mr-4 text-gray-600 text-sm">Note:</label>
+              <textarea
+                name="note"
+                value={data.note}
+                onChange={onChange}
+                className="p-2 border border-gray-300"
+              />
+            </div>
+            <div className="mb-2 flex items-center space-x-2 text-sm text-gray-600">
+              <label>Charge Closure Fee:</label>
+              <div className="flex items-center space-x-2">
+                <label>
+                  <input
+                    type="radio"
+                    name="chargeClosureFee"
+                    value="Yes"
+                    checked={data.chargeClosureFee === 'Yes'}
+                    onChange={onChange}
+                  />
+                  Yes
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="chargeClosureFee"
+                    value="No"
+                    checked={data.chargeClosureFee === 'No'}
+                    onChange={onChange}
+                  />
+                  No
+                </label>
+              </div>
+            </div>
             {/* Add other form fields (Reason, Note, Charge Closure Fee) as needed */}
             {/* ... */}
-            <button type="button" onClick={onSubmit} className="px-4 py-2 bg-blue-500 text-white">
+            <button type="button" onClick={onSubmit} className="px-4 py-2 bg-blue-500 text-white rounded-md">
               Close Account
             </button>
-            <button type="button" onClick={onClose} className="px-4 py-2 ml-2 border">
+            <button type="button" onClick={onClose} className="px-4 py-2 ml-2 border rounded-md">
               Cancel
             </button>
           </form>
@@ -279,7 +327,7 @@ const App = () => {
             type="button"
             className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            {selectedTriggerReason || 'Select Trigger Reason'}
+            {selectedTriggerReason || 'Trigger Reason'}
             <svg
               className="-mr-1 ml-2 h-5 w-5"
               xmlns="http://www.w3.org/2000/svg"
@@ -326,7 +374,7 @@ const App = () => {
                 type="button"
                 className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                {selectedRiskLevel || 'Select Risk Level'}
+                {selectedRiskLevel || 'Risk Level'}
                 <svg
                   className="-mr-1 ml-2 h-5 w-5"
                   xmlns="http://www.w3.org/2000/svg"
