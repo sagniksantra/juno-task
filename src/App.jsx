@@ -1,4 +1,4 @@
-// App.jsx
+
 import React, { useState } from 'react';
 import DataTable from './components/DataTable';
 import data from '../public/data.json';
@@ -56,7 +56,7 @@ const CloseAccountModal = ({ isOpen, onClose, onSubmit, data, onChange }) => {
                 <option value="">Select a reason</option>
                 <option value="Moving">Moving</option>
                 <option value="Financial">Financial reasons</option>
-                {/* Add more options as needed */}
+            
               </select>
             </div>
             <div className="mb-2 mr-4">
@@ -93,8 +93,7 @@ const CloseAccountModal = ({ isOpen, onClose, onSubmit, data, onChange }) => {
                 </label>
               </div>
             </div>
-            {/* Add other form fields (Reason, Note, Charge Closure Fee) as needed */}
-            {/* ... */}
+           
             <button type="button" onClick={onSubmit} className="px-4 py-2 bg-blue-500 text-white rounded-md">
               Close Account
             </button>
@@ -109,6 +108,8 @@ const CloseAccountModal = ({ isOpen, onClose, onSubmit, data, onChange }) => {
 };
 
 const App = () => {
+
+  const [activeTab, setActiveTab] = useState('Pending');
 
   const [showCloseAccountForm, setShowCloseAccountForm] = useState(false);
   const [closeAccountData, setCloseAccountData] = useState({
@@ -128,9 +129,7 @@ const App = () => {
 
     // Function to handle close account form submission
     const handleAccountClosure = () => {
-      // Perform the necessary actions for account closure
-      // (e.g., send data to server, update state, etc.)
-      // For now, let's just log the data to the console
+    
       console.log('Close Account Data:', closeAccountData);
 
       // Close the form and reset data
@@ -218,6 +217,10 @@ const App = () => {
     setShowDropdownRiskLevel((prev) => !prev);
   };
 
+  const handleSidebarItemClick = (tab) => {
+    setActiveTab(tab);
+  };
+
 
   const dropdownOptionsTriggerReason = ['FIFO', 'IP Change'];
   const dropdownOptionsRiskLevel = ['Low', 'Medium', 'High'];
@@ -253,26 +256,67 @@ const App = () => {
       }
     });
 
+    const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleMobileMenuToggle = () => {
+    setMobileMenuOpen((prev) => !prev);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen  w-screen overflow: auto">
+
+      {/* Mobile Hamburger Menu Button */}
+      <button
+        onClick={handleMobileMenuToggle}
+        className="md:hidden absolute top-4 left-4 z-10"
+      >
+        ☰
+      </button>
+
       {/* Left Sidebar/Nav */}
-      <div className="w-1/6 p-4 bg-gray-200 ">
+      <div className={`w-1/6 p-4 bg-gray-100 md:block ${isMobileMenuOpen ? 'block' : 'hidden'}`}>
         <div className="text-2xl font-bold mb-16 text-gray-400">[ Your Logo ]</div>
         <nav>
-          <ul className="space-y-4">
-            <li onClick={() => setView('Pending')}>Pending</li>
-            <li onClick={() => setView('Completed')}>Completed</li>
-            <li>Overview</li>
-            <li>Onboarding</li>
-            <li>Monitoring</li>
-            <li>Flagging</li>
-            <li>Source of Income</li>
-            <li>UAR</li>
+        <ul className="space-y-4">
+            <li
+              onClick={() => handleSidebarItemClick('Pending')}
+              className={`cursor-pointer ${activeTab === 'Pending' ? 'text-blue-500' : ''}`}
+            >
+              Pending
+            </li>
+            <li
+              onClick={() => handleSidebarItemClick('Completed')}
+              className={`cursor-pointer ${activeTab === 'Completed' ? 'text-blue-500' : ''}`}
+            >
+              Completed
+            </li>
+            <li onClick={() => handleSidebarItemClick('Overview')} className={`cursor-pointer ${activeTab === 'Overview' ? 'text-blue-500' : ''}`}>
+              Overview
+            </li>
+            <li onClick={() => handleSidebarItemClick('Onboarding')} className={`cursor-pointer ${activeTab === 'Onboarding' ? 'text-blue-500' : ''}`}>
+              Onboarding
+            </li>
+            <li onClick={() => handleSidebarItemClick('Monitoring')} className={`cursor-pointer ${activeTab === 'Monitoring' ? 'text-blue-500' : ''}`}>
+              Monitoring
+            </li>
+            <li onClick={() => handleSidebarItemClick('Flagging')} className={`cursor-pointer ${activeTab === 'Flagging' ? 'text-blue-500' : ''}`}>
+              Flagging
+            </li>
+            <li onClick={() => handleSidebarItemClick('Source of Income')} className={`cursor-pointer ${activeTab === 'Source of Income' ? 'text-blue-500' : ''}`}>
+              Source of Income
+            </li>
+            <li onClick={() => handleSidebarItemClick('UAR')} className={`cursor-pointer ${activeTab === 'UAR' ? 'text-blue-500' : ''}`}>
+              UAR
+            </li>
           </ul>
         </nav>
         <div className="absolute bottom-0 left-0 p-4">
           <div className="flex items-center space-x-2">
-            <img src="path-to-your-user-photo.jpg" alt="User Photo" className="w-8 h-8 rounded-full" />
+            <img src="https://www.shutterstock.com/image-vector/profile-line-icon-user-outline-260nw-1283517448.jpg" alt="User Photo" className="w-8 h-8 rounded-full" />
             <div>
               <div className="text-sm font-semibold">John Doe</div>
               <div className="text-xs">john@example.com</div>
@@ -282,7 +326,7 @@ const App = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8"  onClick={closeMobileMenu}>
         <h1 className="text-2xl font-bold mb-4">Monitoring</h1>
 
         {/* Top Options */}
@@ -309,13 +353,13 @@ const App = () => {
 
         <div className="mb-4 flex flex-col md:flex-row">
       {/* Search Bar */}
-      <div className="mb-4 md:mr-4">
+      <div className="mb-4 md:mr-4 ">
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="🔎Search..."
           value={searchTerm}
           onChange={handleSearch}
-          className="p-2 border border-gray-300"
+          className="p-2 border rounded-md border-gray-300"
         />
       </div>
 
@@ -413,12 +457,6 @@ const App = () => {
             )}
           </div>
         </div>
-
-        {/* <div className="mb-4">
-          <button onClick={handleCloseAccountModalOpen} className="cursor-pointer text-red-600">
-            Close Account
-          </button>
-        </div> */}
 
         {/* Close Account Modal */}
         <CloseAccountModal
